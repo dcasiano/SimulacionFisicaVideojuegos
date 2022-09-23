@@ -1,0 +1,12 @@
+﻿  callbacks.cpp
+  main.cpp
+  Particle.cpp
+  RenderUtils.cpp
+  Camera.cpp
+  Render.cpp
+C:\hlocal\SimulacionFisicaVideojuegos\skeleton\core.hpp(4,10): fatal error C1083: No se puede abrir el archivo incluir: '../common/Common/Print.h': No such file or directory (compilando archivo de origen callbacks.cpp)
+C:\hlocal\SimulacionFisicaVideojuegos\skeleton\core.hpp(4,10): fatal error C1083: No se puede abrir el archivo incluir: '../common/Common/Print.h': No such file or directory (compilando archivo de origen Particle.cpp)
+C:\hlocal\SimulacionFisicaVideojuegos\skeleton\Render\Camera.h(34,10): fatal error C1083: No se puede abrir el archivo incluir: 'foundation/PxTransform.h': No such file or directory (compilando archivo de origen Render\Camera.cpp)
+C:\hlocal\SimulacionFisicaVideojuegos\skeleton\Render\Render.h(34,10): fatal error C1083: No se puede abrir el archivo incluir: 'PxPhysicsAPI.h': No such file or directory (compilando archivo de origen Render\Render.cpp)
+C:\hlocal\SimulacionFisicaVideojuegos\skeleton\main.cpp(3,10): fatal error C1083: No se puede abrir el archivo incluir: 'PxPhysicsAPI.h': No such file or directory
+C:\hlocal\SimulacionFisicaVideojuegos\skeleton\RenderUtils.cpp(3,10): fatal error C1083: No se puede abrir el archivo incluir: 'PxPhysicsAPI.h': No such file or directory

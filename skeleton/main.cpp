@@ -11,6 +11,7 @@
 #include <iostream>
 
 #include "Particle.h"
+#include "Floor.h"
 
 
 using namespace physx;
@@ -31,6 +32,7 @@ PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
 Particle* particle;
+Floor* floor1;
 
 
 // Initialize physics engine
@@ -57,7 +59,8 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 
-	particle = new Particle({ 0.0,0.0,0.0 }, { 10.0,0.0,0.0 });
+	particle = new Particle({ -50.0,0.0,0.0 }, { 10.0,0.0,0.0 }, { 0.0,2.0,0.0 },0.988);
+	//floor1 = new Floor(20.0, { 0.0,-20.0,0.0 });
 	}
 
 
@@ -92,6 +95,7 @@ void cleanupPhysics(bool interactive)
 	gFoundation->release();
 
 	delete particle;
+	delete floor1;
 	}
 
 // Function called when a key is pressed
