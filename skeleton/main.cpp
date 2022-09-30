@@ -33,7 +33,10 @@ ContactReportCallback gContactReportCallback;
 
 Particle* particle;
 Floor* floor1;
+std::vector<Particle*>projectiles;
 
+enum ShootType { Pistol, Artillery, Fireball, Laser };
+ShootType sType = Pistol;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -59,10 +62,57 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 
-	particle = new Particle({ -50.0,0.0,0.0 }, { 10.0,0.0,0.0 }, { 0.0,2.0,0.0 },0.988);
+	//particle = new Particle({ -50.0,0.0,0.0 }, { 10.0,0.0,0.0 }, { 0.0,2.0,0.0 },0.988);
 	//floor1 = new Floor(20.0, { 0.0,-20.0,0.0 });
 	}
 
+void shoot(ShootType type) {
+	Particle* projectile;
+	Vector3 vel, acc;
+	float damp = 0.99f, mass;
+	switch (type)
+	{
+	case Pistol:
+		vel = 35.0f * GetCamera()->getDir();
+		acc = { 0.0,-1.0,0.0 };
+		mass = 2.0f;
+		break;
+	case Artillery:
+		vel = { GetCamera()->getDir().x,GetCamera()->getDir().y + 0.5f ,GetCamera()->getDir().z };
+		vel *= 30.0f;
+		acc = { 0.0,-20.0,0.0 };
+		mass = 200.0f;
+		break;
+	case Fireball:
+		vel = 10.0f * GetCamera()->getDir();
+		acc = { 0.0,0.6,0.0 };
+		mass = 1.0f;
+		damp = 0.9f;
+		break;
+	case Laser:
+		vel = 100.0f * GetCamera()->getDir();
+		acc = { 0.0,0.0,0.0 };
+		mass = 0.1f;
+		break;
+	default:
+		break;
+	}
+	projectile = new Particle(GetCamera()->getTransform().p, vel, acc, damp);
+	projectile->setMass(mass);
+	projectile->setSpawnTime(GetLastTime());
+	projectiles.push_back(projectile);
+}
+void updateProjectiles(double t) {
+	int num = 0;
+	for (std::vector<Particle*>::iterator it = projectiles.begin(); it != projectiles.end(); ++it) {
+		projectiles.at(num)->integrate(t);
+		
+		if (projectiles.at(num)->getSpawnTime() + 1.000 < GetLastTime() || projectiles.at(num)->getPosition().y < 0.0f) {
+			projectiles.erase(it);
+		}
+		num++;
+	}
+}
 
 // Function to configure what happens in each step of physics
 // interactive: true if the game is rendering, false if it offline
@@ -74,7 +124,9 @@ void stepPhysics(bool interactive, double t)
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 
-	particle->integrate(t);
+	//particle->integrate(t);
+	
+	updateProjectiles(t);
 }
 
 // Function to clean data
@@ -107,14 +159,27 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	{
 	//case 'B': break;
 	//case ' ':	break;
-	case ' ':
-	{
+	case 'F':
+		shoot(sType);
 		break;
-	}
+	case '1':
+		sType = Pistol;
+		break;
+	case '2':
+		sType = Artillery;
+	case '3':
+		sType = Fireball;
+	case '4':
+		sType = Laser;
 	default:
 		break;
 	}
 }
+
+
+
+
+
 
 void onCollision(physx::PxActor* actor1, physx::PxActor* actor2)
 {
