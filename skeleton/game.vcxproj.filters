@@ -12,7 +12,7 @@
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Axis.cpp" />
-    <ClCompile Include="Floor.cpp" />
+    <ClCompile Include="Dartboard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -26,7 +26,7 @@
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Axis.h" />
-    <ClInclude Include="Floor.h" />
+    <ClInclude Include="Dartboard.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

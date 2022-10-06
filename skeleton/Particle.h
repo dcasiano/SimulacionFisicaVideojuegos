@@ -5,7 +5,7 @@ using namespace physx;
 class Particle
 {
 public:
-	Particle(Vector3 pos_, Vector3 vel_, Vector3 acc_, float damp_);
+	Particle(Vector3 pos_, Vector3 vel_, Vector3 acc_, float damp_, Vector4 color);
 	~Particle();
 
 	void integrate(double t);

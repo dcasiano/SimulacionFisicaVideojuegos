@@ -255,7 +255,7 @@
   <ItemGroup>
     <ClCompile Include="Axis.cpp" />
     <ClCompile Include="callbacks.cpp" />
-    <ClCompile Include="Floor.cpp" />
+    <ClCompile Include="Dartboard.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="RenderUtils.cpp" />
@@ -266,7 +266,7 @@
     <ClInclude Include="Axis.h" />
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="core.hpp" />
-    <ClInclude Include="Floor.h" />
+    <ClInclude Include="Dartboard.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="Render\Camera.h" />
