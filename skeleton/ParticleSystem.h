@@ -3,6 +3,7 @@
 #include "RenderUtils.hpp"
 #include "Particle.h"
 #include "ParticleGenerator.h"
+#include "UniformParticleGenerator.h"
 #include <string>
 #include <list>
 

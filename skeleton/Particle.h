@@ -17,13 +17,15 @@ public:
 	double getSpawnTime() { return spawnTime; }
 	void kill() { alive = false; }
 	bool isAlive() { return alive; }
+	void setLifeTime(double value) { lifeTime = value; }
+	double getLifeTime() { return lifeTime; }
 private:
 	PxTransform pos;
 	Vector3 vel, const acc;
 	float damp; // damping
 	Vector3 g; // gravity (m/s^2)
 	float mass; // (kg)
-	double spawnTime;
+	double spawnTime, lifeTime;
 	RenderItem* renderItem;
 	bool alive = true;
 };
