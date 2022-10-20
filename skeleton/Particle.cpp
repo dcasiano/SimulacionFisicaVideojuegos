@@ -22,4 +22,5 @@ void Particle::integrate(double t)
 	vel += (acc + g) * t;
 	vel *= pow(damp, t);
 	pos = PxTransform(pos.p + vel * t);
+	if (spawnTime + lifeTime < GetLastTime())alive = false;
 }

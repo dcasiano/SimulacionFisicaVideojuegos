@@ -12,6 +12,7 @@
 
 #include "Particle.h"
 #include "Dartboard.h"
+#include "ParticleSystem.h"
 
 
 using namespace physx;
@@ -42,6 +43,9 @@ double shootCooldown, lastShotTime;
 
 int score;
 
+//P2
+ParticleSystem* partSyst;
+
 // Initialize physics engine
 void initPhysics(bool interactive)
 {
@@ -67,11 +71,14 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 
 	//particle = new Particle({ -50.0,0.0,0.0 }, { 10.0,0.0,0.0 }, { 0.0,2.0,0.0 },0.988);
-	dartboard = new Dartboard(15.0, { 50.0,50.0,-30.0 });
+	//dartboard = new Dartboard(15.0, { 50.0,50.0,-30.0 });
 	sType = Pistol;
 	shootCooldown = 0.5;
 	lastShotTime = -shootCooldown;
 	score = 0;
+
+	//P2
+	partSyst = new ParticleSystem();
 	}
 
 void shoot(ShootType type) {
@@ -149,7 +156,11 @@ void stepPhysics(bool interactive, double t)
 
 	//particle->integrate(t);
 	
-	updateProjectiles(t);
+	//updateProjectiles(t);
+
+
+	//P2
+	partSyst->update(t);
 }
 
 // Function to clean data

@@ -16,7 +16,8 @@ public:
 	~ParticleSystem();
 	void update(double t);
 private:
-	list<Particle*>particles;
+	//list<Particle*>particles;
+	vector<Particle*>particles;
 	list<ParticleGenerator*>particlesGenerators;
 };
 
