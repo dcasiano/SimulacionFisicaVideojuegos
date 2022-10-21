@@ -4,6 +4,7 @@
 #include "Particle.h"
 #include "ParticleGenerator.h"
 #include "UniformParticleGenerator.h"
+#include "NormalParticleGenerator.h"
 #include <string>
 #include <list>
 

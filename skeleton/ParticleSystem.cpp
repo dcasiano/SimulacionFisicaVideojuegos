@@ -8,7 +8,8 @@ ParticleSystem::ParticleSystem()
 	vel = { 0.0,30.0,0.0 };
 	velWidth = { 10.0,0.0,10.0 };
 	acc = { 0.0,-10.0,0.0 };
-	particlesGenerators.push_back(new UniformParticleGenerator(pos, vel, posWidth, velWidth, acc));
+	//particlesGenerators.push_back(new UniformParticleGenerator(pos, vel, posWidth, velWidth, acc));
+	particlesGenerators.push_back(new NormalParticleGenerator(pos, vel, posWidth, velWidth, acc));
 }
 
 ParticleSystem::~ParticleSystem()
