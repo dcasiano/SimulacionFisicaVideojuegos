@@ -9,7 +9,8 @@ ParticleSystem::ParticleSystem()
 	velWidth = { 10.0,0.0,10.0 };
 	acc = { 0.0,-10.0,0.0 };
 	//particlesGenerators.push_back(new UniformParticleGenerator(pos, vel, posWidth, velWidth, acc));
-	particlesGenerators.push_back(new NormalParticleGenerator(pos, vel, posWidth, velWidth, acc));
+	//particlesGenerators.push_back(new NormalParticleGenerator(pos, vel, posWidth, velWidth, acc));
+	fireworkGenerator = new CircleGenerator();
 }
 
 ParticleSystem::~ParticleSystem()
@@ -18,12 +19,6 @@ ParticleSystem::~ParticleSystem()
 
 void ParticleSystem::update(double t)
 {
-	/*if (particles.size()<2) {
-		for (auto e : particlesGenerators) {
-			list<Particle*> part = e->generateParticles();
-			for (auto p : part)particles.push_back(p);
-		}
-	}*/
 	for (auto e : particlesGenerators) {
 		list<Particle*> part = e->generateParticles();
 		for (auto p : part)particles.push_back(p);
@@ -38,45 +33,30 @@ void ParticleSystem::update(double t)
 		
 	}
 
-	//list<Particle*>deadList;
-	//for (list<Particle*>::iterator it = particles.begin(); it != particles.end(); ++it) {
-	//	(*it)->integrate(t);
-	//	if (!(*it)->isAlive()) {
-	//		/*delete (*it);
-	//		particles.erase(it);*/
-	//		deadList.push_back(*it);
-	//		
-	//	}
-	//}
-	//vector<list<Particle*>::iterator>deadList;
-	//int numPart = particles.size();
-	//list<Particle*>::iterator it = particles.begin();
-	//for (int i = 0; i < numPart; i++) {
-	//	(*it)->integrate(t);
-	//	//if (!(*it)->isAlive()) {
-	//	//	//list<Particle*>::iterator aux = it;
-	//	//	//particles.remove(*it);
-	//	//	deadList.push_back(it);
-	//	//	//particles.erase(it);
-	//	//	//delete (*it);
-	//	//	//return;
-	//	//}
-	//	//else ++it;
-	//}
-	/*for (int i = 0; i < deadList.size(); i++) {
-		particles.erase(deadList[i]);
-	}*/
-	//int aux = 0;
-	//while (aux != deadList.size()) {
-	//	particles.remove(deadList.front());
-	//	delete deadList.front();
-	//	//deadList.pop_front();
-	//	aux++;
-	//}
-	/*for (auto e : particles) {
-		e->integrate(t);
-		if (!e->isAlive()) {
-			particles.remove(e);
+	// Fireworks
+	for (int i = 0; i < fireworks.size(); i++) {
+		fireworks.at(i)->integrate(t);
+		if (!fireworks.at(i)->isAlive()) {
+			if (fireworks.at(i)->hasToExplode()) {
+				int newId = fireworks.at(i)->getId() + 1;
+				int numExplosions = fireworks.at(i)->getNumExplosions();
+				Vector4 color = { 1,newId / (float)numExplosions,0,1 };
+				fireworkGenerator->setParams(fireworks.at(i)->getPosition(), { 0,0,0 }, { 2,2,2 }, { 30,30,30 }, color);
+				list<Firework*> fw = fireworkGenerator->generateParticles(newId, numExplosions, fireworks.at(i)->getLifeTime());
+				for (auto e : fw)fireworks.push_back(e);
+			}
+			delete fireworks.at(i);
+			fireworks.erase(fireworks.begin() + i);
 		}
-	}*/
+
+	}
+
+}
+
+void ParticleSystem::shootFirework()
+{
+	Firework* fw = new Firework({ -100,-100,-100 }, { 0,80,0 }, { 0,-10,0 }, 0.99f, { 1,0,0,1 }, 0, 2);
+	fw->setSpawnTime(GetLastTime());
+	fw->setLifeTime(2.0);
+	fireworks.push_back(fw);
 }

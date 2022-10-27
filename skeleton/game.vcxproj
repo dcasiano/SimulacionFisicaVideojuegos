@@ -255,7 +255,9 @@
   <ItemGroup>
     <ClCompile Include="Axis.cpp" />
     <ClCompile Include="callbacks.cpp" />
+    <ClCompile Include="CircleGenerator.cpp" />
     <ClCompile Include="Dartboard.cpp" />
+    <ClCompile Include="Firework.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleGenerator.cpp" />
@@ -269,8 +271,10 @@
   <ItemGroup>
     <ClInclude Include="Axis.h" />
     <ClInclude Include="callbacks.hpp" />
+    <ClInclude Include="CircleGenerator.h" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="Dartboard.h" />
+    <ClInclude Include="Firework.h" />
     <ClInclude Include="NormalParticleGenerator.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleGenerator.h" />

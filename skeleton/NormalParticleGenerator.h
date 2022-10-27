@@ -3,11 +3,11 @@
 class NormalParticleGenerator :public ParticleGenerator
 {
 public:
-	NormalParticleGenerator(Vector3 pos, Vector3 vel, Vector3 posWidth_, Vector3 velWidth_, Vector3 acc_);
+	NormalParticleGenerator(Vector3 pos, Vector3 vel, Vector3 posDesv, Vector3 velDesv, Vector3 acc);
 	~NormalParticleGenerator();
 	virtual list<Particle*>generateParticles();
 protected:
-	Vector3 velWidth, posWidth;
+	Vector3 velDesv, posDesv;
 	default_random_engine generator;
-	normal_distribution<double>d{ 0.0,0.5 };
+	normal_distribution<double>d{ 0.0,1.0 };
 };

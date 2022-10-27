@@ -1,14 +1,14 @@
 #include "UniformParticleGenerator.h"
 
-UniformParticleGenerator::UniformParticleGenerator(Vector3 pos, Vector3 vel, Vector3 posWidth_, Vector3 velWidth_, Vector3 acc_)
+UniformParticleGenerator::UniformParticleGenerator(Vector3 pos, Vector3 vel, Vector3 posWidth, Vector3 velWidth, Vector3 acc)
 {
 	meanPos = pos;
 	meanVel = vel;
-	posWidth = posWidth_;
-	velWidth = velWidth_;
+	this->posWidth = posWidth;
+	this->velWidth = velWidth;
 	numParticles = 1;
 	generationProb = 1;
-	acc = acc_;
+	this->acc = acc;
 	damp = 0.99f;
 	mass = 1.0f;
 	color = { 0,1,0,1.0 };

@@ -191,8 +191,6 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	//case 'B': break;
-	//case ' ':	break;
 	case 'F':
 		shoot(sType);
 		break;
@@ -207,6 +205,13 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		break;
 	case '4':
 		sType = Laser;
+		break;
+	case 'R':
+		if (lastShotTime + shootCooldown < GetLastTime()) {
+			partSyst->shootFirework();
+			lastShotTime = GetLastTime();
+		}
+		break;
 	default:
 		break;
 	}

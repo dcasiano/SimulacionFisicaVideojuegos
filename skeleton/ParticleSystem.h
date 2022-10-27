@@ -5,6 +5,7 @@
 #include "ParticleGenerator.h"
 #include "UniformParticleGenerator.h"
 #include "NormalParticleGenerator.h"
+#include "CircleGenerator.h"
 #include <string>
 #include <list>
 
@@ -16,9 +17,12 @@ public:
 	ParticleSystem();
 	~ParticleSystem();
 	void update(double t);
+	void shootFirework();
 private:
 	//list<Particle*>particles;
 	vector<Particle*>particles;
 	list<ParticleGenerator*>particlesGenerators;
+	vector<Firework*>fireworks;
+	CircleGenerator* fireworkGenerator;
 };
 

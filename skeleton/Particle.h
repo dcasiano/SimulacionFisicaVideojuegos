@@ -5,7 +5,7 @@ using namespace physx;
 class Particle
 {
 public:
-	Particle(Vector3 pos_, Vector3 vel_, Vector3 acc_, float damp_, Vector4 color);
+	Particle(Vector3 pos, Vector3 vel, Vector3 acc, float damp, Vector4 color);
 	~Particle();
 
 	void integrate(double t);
@@ -19,7 +19,7 @@ public:
 	bool isAlive() { return alive; }
 	void setLifeTime(double value) { lifeTime = value; }
 	double getLifeTime() { return lifeTime; }
-private:
+protected:
 	PxTransform pos;
 	Vector3 vel, const acc;
 	float damp; // damping

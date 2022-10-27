@@ -1,13 +1,13 @@
 #include "Particle.h"
 
-Particle::Particle(Vector3 pos_, Vector3 vel_, Vector3 acc_, float damp_, Vector4 color)
+Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acc, float damp, Vector4 color)
 {
 	//pos.p = pos_;
-	pos = PxTransform(pos_.x, pos_.y, pos_.z);
-	vel = vel_;
-	acc = acc_;
-	damp = damp_;
-	renderItem = new RenderItem(CreateShape(PxSphereGeometry(1.0)), &pos, color);
+	this->pos = PxTransform(pos.x, pos.y, pos.z);
+	this->vel = vel;
+	this->acc = acc;
+	this->damp = damp;
+	renderItem = new RenderItem(CreateShape(PxSphereGeometry(1.0)), &this->pos, color);
 	g = { 0.0,0.0,0.0 };
 	mass = 1.0;
 }

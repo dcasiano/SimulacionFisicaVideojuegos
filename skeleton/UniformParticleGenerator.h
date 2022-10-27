@@ -3,7 +3,7 @@
 class UniformParticleGenerator :public ParticleGenerator
 {
 public:
-	UniformParticleGenerator(Vector3 pos, Vector3 vel, Vector3 posWidth_, Vector3 velWidth_, Vector3 acc_);
+	UniformParticleGenerator(Vector3 pos, Vector3 vel, Vector3 posWidth, Vector3 velWidth, Vector3 acc);
 	~UniformParticleGenerator();
 	virtual list<Particle*>generateParticles();
 protected:
