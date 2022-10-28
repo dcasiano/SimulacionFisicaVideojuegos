@@ -1,0 +1,17 @@
+particle:
+f+=fi
+f=0
+integrate: acc=-f*inv(m)
+
+particlesystem:
+particleforceregistry
+cambiar update addparticle y deleteparticle
+
+particleforceregistry:
+update
+addreg
+deleteF
+deleteP
+
+forcegenerator: (de aqui hereda gravity, wind, tornado, explosion)
+virtual updateforce(particle*,t)
