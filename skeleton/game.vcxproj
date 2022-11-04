@@ -258,6 +258,7 @@
     <ClCompile Include="CircleGenerator.cpp" />
     <ClCompile Include="Dartboard.cpp" />
     <ClCompile Include="Firework.cpp" />
+    <ClCompile Include="ForceRegistry.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleGenerator.cpp" />
@@ -275,6 +276,7 @@
     <ClInclude Include="core.hpp" />
     <ClInclude Include="Dartboard.h" />
     <ClInclude Include="Firework.h" />
+    <ClInclude Include="ForceRegistry.h" />
     <ClInclude Include="NormalParticleGenerator.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleGenerator.h" />

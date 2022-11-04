@@ -19,6 +19,7 @@
     <ClCompile Include="NormalParticleGenerator.cpp" />
     <ClCompile Include="Firework.cpp" />
     <ClCompile Include="CircleGenerator.cpp" />
+    <ClCompile Include="ForceRegistry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -40,6 +41,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Firework.h" />
     <ClInclude Include="CircleGenerator.h" />
+    <ClInclude Include="ForceRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

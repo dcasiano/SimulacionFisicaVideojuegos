@@ -5,13 +5,13 @@ integrate: acc=-f*inv(m)
 
 particlesystem:
 particleforceregistry
-cambiar update addparticle y deleteparticle
+cambiar update(llama al update del forceregistry) addparticle y deleteparticle
 
-particleforceregistry:
-update
-addreg
-deleteF
-deleteP
+particleforceregistry:<multimap>
+updateForces: para cada particula llama a su update con las fuerzas que tiene
+addregistry(P,F)
+deleteForce
+deleteParticle(P)
 
 forcegenerator: (de aqui hereda gravity, wind, tornado, explosion)
-virtual updateforce(particle*,t)
+virtual updateforce(particle*,t): para gravity F=g.part->getMass();
