@@ -15,6 +15,8 @@ public:
 	void setPosition(Vector3 pos_) { pos = PxTransform(pos_.x, pos_.y, pos_.z); }
 	void setSpawnTime(double currentTime) { spawnTime = currentTime; }
 	Vector3 getPosition() { return pos.p; }
+	float getMass() { return mass; }
+	float getInvMass() { return invMass; }
 	double getSpawnTime() { return spawnTime; }
 	void kill() { alive = false; }
 	bool isAlive() { return alive; }

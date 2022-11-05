@@ -1,14 +1,15 @@
 #pragma once
 #include <map>
-#include "Particle.h"
-using Force = Vector3;
-class ForceRegistry:public std::multimap<Force,Particle*> // tiene que ser multimap<ForceGenerator,Particle*>
+#include "ForceGenerator.h"
+class ForceRegistry:public std::multimap<ForceGenerator*,Particle*> // tiene que ser multimap<ForceGenerator,Particle*>
 {
 public:
 	ForceRegistry();
 	~ForceRegistry(){}
-	void addRegistry(Force f, Particle* p) { this->insert(std::pair<Force,Particle*>( f,p )); p->addForce(f); }
-	void updateForces();
+	void addRegistry(ForceGenerator* fg, Particle* p) { insert(std::pair<ForceGenerator*,Particle*>( fg,p )); }
+	void updateForces(double duration);
+	void deleteForceGenerator(ForceGenerator* fg) { erase(fg); }
+	void deleteParticle(Particle* p);
 protected:
 	//std::multimap<Force, Particle*> map;
 };

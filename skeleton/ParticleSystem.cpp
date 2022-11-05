@@ -7,26 +7,38 @@ ParticleSystem::ParticleSystem()
 	posWidth = { 2.0,2.0,2.0 };
 	vel = { 0.0,30.0,0.0 };
 	velWidth = { 10.0,0.0,10.0 };
-	acc = { 0.0,-10.0,0.0 };
-	//particlesGenerators.push_back(new UniformParticleGenerator(pos, vel, posWidth, velWidth, acc));
+	acc = { 0.0,0.0,0.0 };
+	particlesGenerators.push_back(new UniformParticleGenerator(pos, vel, posWidth, velWidth, acc));
 	//particlesGenerators.push_back(new NormalParticleGenerator(pos, vel, posWidth, velWidth, acc));
 	fireworkGenerator = new CircleGenerator();
+	forceReg = new ForceRegistry();
+	gravityFG = new GravityForceGenerator({ 0.0,-10.0,0.0 });
 }
 
 ParticleSystem::~ParticleSystem()
 {
+	delete fireworkGenerator;
+	delete forceReg;
+	delete gravityFG;
 }
 
 void ParticleSystem::update(double t)
 {
+	forceReg->updateForces(t);
+	//if (GetLastTime() > 3.0)forceReg->deleteForceGenerator(gravityFG);
+
 	for (auto e : particlesGenerators) {
 		list<Particle*> part = e->generateParticles();
-		for (auto p : part)particles.push_back(p);
+		for (auto p : part) {
+			forceReg->addRegistry(gravityFG, p);
+			particles.push_back(p);
+		}
 	}
 	
 	for (int i = 0; i < particles.size(); i++) {
 		particles.at(i)->integrate(t);
 		if (!particles.at(i)->isAlive() || particles.at(i)->getPosition().y < 0.0f) {
+			forceReg->deleteParticle(particles.at(i));
 			delete particles.at(i);
 			particles.erase(particles.begin() + i);
 		}
@@ -45,6 +57,7 @@ void ParticleSystem::update(double t)
 				list<Firework*> fw = fireworkGenerator->generateParticles(newId, numExplosions, fireworks.at(i)->getLifeTime());
 				for (auto e : fw)fireworks.push_back(e);
 			}
+			forceReg->deleteParticle(fireworks.at(i));
 			delete fireworks.at(i);
 			fireworks.erase(fireworks.begin() + i);
 		}
