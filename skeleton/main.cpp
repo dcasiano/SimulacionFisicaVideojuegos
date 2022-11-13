@@ -212,6 +212,12 @@ void keyPress(unsigned char key, const PxTransform& camera)
 			lastShotTime = GetLastTime();
 		}
 		break;
+	case 'T':
+		partSyst->generateTestParticles(2000, { 0,30,0 }, 500);
+		break;
+	case 'E':
+		partSyst->generateExplosion();
+		break;
 	default:
 		break;
 	}

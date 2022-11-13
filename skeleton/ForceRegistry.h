@@ -1,7 +1,7 @@
 #pragma once
 #include <map>
 #include "ForceGenerator.h"
-class ForceRegistry:public std::multimap<ForceGenerator*,Particle*> // tiene que ser multimap<ForceGenerator,Particle*>
+class ForceRegistry:public std::multimap<ForceGenerator*,Particle*>
 {
 public:
 	ForceRegistry();

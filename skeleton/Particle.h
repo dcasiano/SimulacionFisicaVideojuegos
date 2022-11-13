@@ -23,6 +23,11 @@ public:
 	void setLifeTime(double value) { lifeTime = value; }
 	double getLifeTime() { return lifeTime; }
 	void addForce(Vector3& const f) { force += f; }
+	void setK1Wind(double k1) { k1Wind = k1; }
+	void setK2Wind(double k2) { k2Wind = k2; }
+	double getK1Wind() { return k1Wind; }
+	double getK2Wind() { return k2Wind; }
+	Vector3 getVelocity() { return vel; }
 protected:
 	void clearForce() { force = { 0.0,0.0,0.0 }; }
 	PxTransform pos;
@@ -32,6 +37,7 @@ protected:
 	Vector3 g; // gravity (m/s^2)
 	float mass; // (kg)
 	float invMass;
+	double k1Wind, k2Wind;
 	double spawnTime, lifeTime;
 	RenderItem* renderItem;
 	bool alive = true;

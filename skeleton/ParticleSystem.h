@@ -10,6 +10,9 @@
 #include "CircleGenerator.h"
 #include "ForceRegistry.h"
 #include "GravityForceGenerator.h"
+#include "WindForceGenerator.h"
+#include "WhirlwindForceGenerator.h"
+#include "ExplosionForceGenerator.h"
 
 using namespace physx;
 using namespace std;
@@ -20,6 +23,8 @@ public:
 	~ParticleSystem();
 	void update(double t);
 	void shootFirework();
+	void generateTestParticles(int num, const Vector3& pos, double r);
+	void generateExplosion();
 	//void addParticleToRegistry(Particle* p){forceReg->addRegistry}
 	//void deleteParticleFromRegistry(Particle* p) { forceReg->deleteParticle(p); }
 private:
@@ -30,5 +35,8 @@ private:
 	CircleGenerator* fireworkGenerator;
 	ForceRegistry* forceReg;
 	GravityForceGenerator* gravityFG;
+	WindForceGenerator* windFG;
+	WhirlwindForceGenerator* whirlwindFG;
+	ExplosionForceGenerator* explosionFG;
 };
 
