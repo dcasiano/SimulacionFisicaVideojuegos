@@ -13,12 +13,7 @@ void WindForceGenerator::updateForce(Particle* p, double duration)
 	// check the particle has finite mass
 	if (fabs(p->getInvMass() < 1e-10))return;
 	if (isAffectedByWind(p->getPosition())) {
-		p->addForce(p->getK1Wind() * (windVel - p->getVelocity()));
-		/*Vector3 v = p->getVelocity();
-		float dragCoeff = v.normalize();
-		dragCoeff = p->getK1Wind() * dragCoeff + p->getK2Wind() * dragCoeff * dragCoeff;
-		Vector3 windForce = -v * dragCoeff;
-		p->addForce(windForce);*/
+		p->addForce(p->getK1Wind() * (windVel - p->getVelocity())+p->getK2Wind()* (windVel - p->getVelocity())* (windVel - p->getVelocity()).magnitude());
 	}
 }
 

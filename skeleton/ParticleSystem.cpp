@@ -84,6 +84,7 @@ void ParticleSystem::shootFirework()
 void ParticleSystem::generateTestParticles(int num, const Vector3& pos, double r)
 {
 	default_random_engine generator;
+	generator.seed(GetLastTime());
 	normal_distribution<double>d{ -1.0,1.0 };
 	for (int i = 0; i < num; i++) {
 		float theta = (float)d(generator) * 2 * 3.141592564;
@@ -95,9 +96,9 @@ void ParticleSystem::generateTestParticles(int num, const Vector3& pos, double r
 		float cosPhi = cosf(phi);
 		Vector3 partPos = { pos.x + rad * sinPhi * cosTheta ,pos.y + rad * sinPhi * sinTheta ,pos.z + rad * cosPhi };
 
-		Particle* part = new Particle(partPos, { 0,0,0 }, { 0,0,0 }, 0.99, { 0,1,0,1 });
+		Particle* part = new Particle(partPos, { 0,0,0 }, { 0,0,0 }, 0.99f, { 0,1,0,1 });
 		part->setSpawnTime(GetLastTime());
-		part->setLifeTime(5.0);
+		part->setLifeTime(10.0);
 		//forceReg->addRegistry(whirlwindFG, part);
 		particles.push_back(part);
 	}

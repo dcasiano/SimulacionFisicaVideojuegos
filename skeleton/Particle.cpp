@@ -12,6 +12,8 @@ Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acc, float damp, Vector4 co
 	mass = 1.0;
 	invMass = 1.0;
 	k1Wind = 0.47;
+	//k2Wind = 1.29 * 0.5;
+	//k2Wind = 0.02;
 	k2Wind = 0;
 	clearForce();
 }

@@ -1,3 +1,5 @@
+PRACTICA 3
+
 particle:
 f+=fi
 f=0
@@ -15,3 +17,21 @@ deleteParticle(P)
 
 forcegenerator: (de aqui hereda gravity, wind, tornado, explosion)
 virtual updateforce(particle*,t): para gravity F=g.part->getMass();
+
+PRACTICA 4
+
+de ForceGenerator hereda SpringForceGenerator y FlotacionFG:
+-SpringForceGenerator:
+k
+restLength
+other (Particle*)
+updateForce{
+force=-p->getPos()-other->GetPos();
+l=-force.normalize();
+force+=(-l-restLength)*k}
+
+de SpringForceGenerator hereda:
+-AnchoredSpringFG: la particula other es fija (en la constructora se declara como fija y en la destructora se elimina)
+probar con k>500 (con Euler semiimplicito debe funcionar bien)
+
+-GomaElasticaFG
