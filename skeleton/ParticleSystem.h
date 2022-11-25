@@ -13,6 +13,8 @@
 #include "WindForceGenerator.h"
 #include "WhirlwindForceGenerator.h"
 #include "ExplosionForceGenerator.h"
+#include "SpringForceGenerator.h"
+#include "AnchoredSpringFG.h"
 
 using namespace physx;
 using namespace std;
@@ -25,6 +27,8 @@ public:
 	void shootFirework();
 	void generateTestParticles(int num, const Vector3& pos, double r);
 	void generateExplosion();
+	void generateSpringDemo();
+	void increaseSpringK(double amount) { if (anchSprFG != nullptr)anchSprFG->increaseK(amount); }
 	//void addParticleToRegistry(Particle* p){forceReg->addRegistry}
 	//void deleteParticleFromRegistry(Particle* p) { forceReg->deleteParticle(p); }
 private:
@@ -38,5 +42,6 @@ private:
 	WindForceGenerator* windFG;
 	WhirlwindForceGenerator* whirlwindFG;
 	ExplosionForceGenerator* explosionFG;
+	AnchoredSpringFG* anchSprFG;
 };
 

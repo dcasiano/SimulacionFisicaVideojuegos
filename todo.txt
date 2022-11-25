@@ -28,7 +28,7 @@ other (Particle*)
 updateForce{
 force=-p->getPos()-other->GetPos();
 l=-force.normalize();
-force+=(-l-restLength)*k}
+force*=(-l-restLength)*k}
 
 de SpringForceGenerator hereda:
 -AnchoredSpringFG: la particula other es fija (en la constructora se declara como fija y en la destructora se elimina)

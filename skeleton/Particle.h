@@ -20,7 +20,7 @@ public:
 	double getSpawnTime() { return spawnTime; }
 	void kill() { alive = false; }
 	bool isAlive() { return alive; }
-	void setLifeTime(double value) { lifeTime = value; }
+	void setLifeTime(double value) { lifeTime = value; isImmortal = false; }
 	double getLifeTime() { return lifeTime; }
 	void addForce(Vector3& const f) { force += f; }
 	void setK1Wind(double k1) { k1Wind = k1; }
@@ -40,6 +40,6 @@ protected:
 	double k1Wind, k2Wind;
 	double spawnTime, lifeTime;
 	RenderItem* renderItem;
-	bool alive = true;
+	bool alive = true, isImmortal = true;
 };
 

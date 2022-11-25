@@ -8,7 +8,7 @@ ParticleSystem::ParticleSystem()
 	vel = { 0.0,30.0,0.0 };
 	velWidth = { 10.0,0.0,10.0 };
 	acc = { 0.0,0.0,0.0 };
-	particlesGenerators.push_back(new UniformParticleGenerator(pos, vel, posWidth, velWidth, acc));
+	//particlesGenerators.push_back(new UniformParticleGenerator(pos, vel, posWidth, velWidth, acc));
 	//particlesGenerators.push_back(new NormalParticleGenerator(pos, vel, posWidth, velWidth, acc));
 	fireworkGenerator = new CircleGenerator();
 	forceReg = new ForceRegistry();
@@ -16,6 +16,8 @@ ParticleSystem::ParticleSystem()
 	windFG = new WindForceGenerator({ 80,0,0 }, { 0,30,0 }, 15);
 	whirlwindFG = new WhirlwindForceGenerator(5, { 0,30,0 }, 100);
 	explosionFG = new ExplosionForceGenerator(10000, { 0,30,0 }, 20, 343);
+	anchSprFG = nullptr;
+	generateSpringDemo();
 }
 
 ParticleSystem::~ParticleSystem()
@@ -25,6 +27,7 @@ ParticleSystem::~ParticleSystem()
 	delete gravityFG;
 	delete windFG;
 	delete whirlwindFG;
+	delete anchSprFG;
 }
 
 void ParticleSystem::update(double t)
@@ -110,4 +113,13 @@ void ParticleSystem::generateExplosion()
 		explosionFG->setInitialTime(GetLastTime());
 		forceReg->addRegistry(explosionFG, p);
 	}
+}
+
+void ParticleSystem::generateSpringDemo()
+{
+	Particle* p = new Particle({ -10,20,0 }, { 0,0,0 }, { 0,0,0 }, 0.85, { 0,1,0,1 });
+	anchSprFG = new AnchoredSpringFG(10, 10, { 10,20,0 });
+	forceReg->addRegistry(anchSprFG, p);
+	forceReg->addRegistry(gravityFG, p);
+	particles.push_back(p);
 }

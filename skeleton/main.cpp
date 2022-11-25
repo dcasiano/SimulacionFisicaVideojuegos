@@ -218,6 +218,12 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case 'E':
 		partSyst->generateExplosion();
 		break;
+	case 'P':
+		partSyst->increaseSpringK(100);
+		break;
+	case 'O':
+		partSyst->increaseSpringK(-100);
+		break;
 	default:
 		break;
 	}
