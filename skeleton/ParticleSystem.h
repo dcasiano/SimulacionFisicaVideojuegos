@@ -15,6 +15,8 @@
 #include "ExplosionForceGenerator.h"
 #include "SpringForceGenerator.h"
 #include "AnchoredSpringFG.h"
+#include "ElasticBandFG.h"
+#include "BuoyancyFG.h"
 
 using namespace physx;
 using namespace std;
@@ -29,6 +31,7 @@ public:
 	void generateExplosion();
 	void generateSpringDemo();
 	void increaseSpringK(double amount) { if (anchSprFG != nullptr)anchSprFG->increaseK(amount); }
+	void generateSlinky();
 	//void addParticleToRegistry(Particle* p){forceReg->addRegistry}
 	//void deleteParticleFromRegistry(Particle* p) { forceReg->deleteParticle(p); }
 private:
@@ -38,6 +41,7 @@ private:
 	vector<Firework*>fireworks;
 	CircleGenerator* fireworkGenerator;
 	ForceRegistry* forceReg;
+	vector<ForceGenerator*>forceGenerators;
 	GravityForceGenerator* gravityFG;
 	WindForceGenerator* windFG;
 	WhirlwindForceGenerator* whirlwindFG;

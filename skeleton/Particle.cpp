@@ -7,6 +7,7 @@ Particle::Particle(Vector3 pos, Vector3 vel, Vector3 acc, float damp, Vector4 co
 	this->vel = vel;
 	this->acc = acc;
 	this->damp = damp;
+	this->color = color;
 	renderItem = new RenderItem(CreateShape(PxSphereGeometry(1.0)), &this->pos, color);
 	g = { 0.0,0.0,0.0 };
 	mass = 1.0;

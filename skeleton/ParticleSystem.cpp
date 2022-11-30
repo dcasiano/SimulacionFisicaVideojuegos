@@ -12,7 +12,7 @@ ParticleSystem::ParticleSystem()
 	//particlesGenerators.push_back(new NormalParticleGenerator(pos, vel, posWidth, velWidth, acc));
 	fireworkGenerator = new CircleGenerator();
 	forceReg = new ForceRegistry();
-	gravityFG = new GravityForceGenerator({ 0.0,-10.0,0.0 });
+	gravityFG = new GravityForceGenerator({ 0.0,-9.8,0.0 });
 	windFG = new WindForceGenerator({ 80,0,0 }, { 0,30,0 }, 15);
 	whirlwindFG = new WhirlwindForceGenerator(5, { 0,30,0 }, 100);
 	explosionFG = new ExplosionForceGenerator(10000, { 0,30,0 }, 20, 343);
@@ -28,6 +28,7 @@ ParticleSystem::~ParticleSystem()
 	delete windFG;
 	delete whirlwindFG;
 	delete anchSprFG;
+	forceGenerators.clear();
 }
 
 void ParticleSystem::update(double t)
@@ -117,9 +118,62 @@ void ParticleSystem::generateExplosion()
 
 void ParticleSystem::generateSpringDemo()
 {
-	Particle* p = new Particle({ -10,20,0 }, { 0,0,0 }, { 0,0,0 }, 0.85, { 0,1,0,1 });
+	// Anchored spring
+	/*Particle* p = new Particle({ -10,20,0 }, { 0,0,0 }, { 0,0,0 }, 0.85, { 0,1,0,1 });
 	anchSprFG = new AnchoredSpringFG(10, 10, { 10,20,0 });
 	forceReg->addRegistry(anchSprFG, p);
 	forceReg->addRegistry(gravityFG, p);
-	particles.push_back(p);
+	particles.push_back(p);*/
+
+	// Elastic band
+	/*Particle* p1 = new Particle({ -50,30,0 }, { -00,0,0 }, { 0,0,0 }, 0.85, { 0,1,0,1 });
+	Particle* p2 = new Particle({ 50,30,0 }, { 00,0,0 }, { 0,0,0 }, 0.85, { 0,0,1,1 });
+	ElasticBandFG* ebFG1 = new ElasticBandFG(p2, 10, 30);
+	ElasticBandFG* ebFG2 = new ElasticBandFG(p1, 10, 30);
+	forceReg->addRegistry(ebFG1, p1);
+	forceReg->addRegistry(ebFG2, p2);
+	particles.push_back(p1);
+	particles.push_back(p2);*/
+
+	// Slinky
+	//generateSlinky();
+
+	// Buoyancy
+	Particle* cube = new Particle({ 0,20,0 }, { 0,0,0 }, { 0,0,0 }, 0.85, { 0,1,0,1 });
+	cube->setAsCube();
+	particles.push_back(cube);
+	forceReg->addRegistry(gravityFG, cube);
+	BuoyancyFG* bFG = new BuoyancyFG(1, 0.01, 1000);
+	forceReg->addRegistry(bFG, cube);
+}
+
+void ParticleSystem::generateSlinky()
+{
+	double k = 20, restLength = 10;
+	float y0 = 60;
+	float dist = 4; // initial distance between each particle
+	AnchoredSpringFG* anchSprFG = new AnchoredSpringFG(k, restLength, { 0,y0,0 });
+	Particle* p1 = new Particle({ 0,y0 - dist,0 }, { 0,0,0 }, { 0,0,0 }, 0.95, { 0,1,1,1 });
+	forceReg->addRegistry(anchSprFG, p1);
+	forceReg->addRegistry(gravityFG, p1);
+	particles.push_back(p1);
+	forceGenerators.push_back(anchSprFG);
+	Particle* p2 = new Particle({ 0,y0 - 2 * dist,0 }, { -00,0,0 }, { 0,0,0 }, 0.95, { 0,1,0.5,1 });
+	SpringForceGenerator* ebFG12 = new SpringForceGenerator(p2, k, restLength);
+	SpringForceGenerator* ebFG21 = new SpringForceGenerator(p1, k, restLength);
+	forceReg->addRegistry(ebFG12, p1);
+	forceReg->addRegistry(ebFG21, p2);
+	forceReg->addRegistry(gravityFG, p2);
+	particles.push_back(p2);
+	forceGenerators.push_back(ebFG12);
+	forceGenerators.push_back(ebFG21);
+	Particle* p3 = new Particle({ 0,y0 - 3 * dist,0 }, { -00,0,0 }, { 0,0,0 }, 0.95, { 0,1,0,1 });
+	SpringForceGenerator* ebFG23 = new SpringForceGenerator(p3, k, restLength);
+	SpringForceGenerator* ebFG32 = new SpringForceGenerator(p2, k, restLength);
+	forceReg->addRegistry(ebFG23, p2);
+	forceReg->addRegistry(ebFG32, p3);
+	forceReg->addRegistry(gravityFG, p3);
+	particles.push_back(p3);
+	forceGenerators.push_back(ebFG23);
+	forceGenerators.push_back(ebFG32);
 }
