@@ -119,32 +119,36 @@ void ParticleSystem::generateExplosion()
 void ParticleSystem::generateSpringDemo()
 {
 	// Anchored spring
-	/*Particle* p = new Particle({ -10,20,0 }, { 0,0,0 }, { 0,0,0 }, 0.85, { 0,1,0,1 });
+	Particle* p = new Particle({ -10,20,0 }, { 0,0,0 }, { 0,0,0 }, 0.85, { 0,1,0,1 });
 	anchSprFG = new AnchoredSpringFG(10, 10, { 10,20,0 });
 	forceReg->addRegistry(anchSprFG, p);
 	forceReg->addRegistry(gravityFG, p);
-	particles.push_back(p);*/
+	particles.push_back(p);
+	forceGenerators.push_back(anchSprFG);
 
 	// Elastic band
-	/*Particle* p1 = new Particle({ -50,30,0 }, { -00,0,0 }, { 0,0,0 }, 0.85, { 0,1,0,1 });
-	Particle* p2 = new Particle({ 50,30,0 }, { 00,0,0 }, { 0,0,0 }, 0.85, { 0,0,1,1 });
+	/*Particle* p1 = new Particle({ -50,30,0 }, { -00,0,0 }, { 0,0,0 }, 0.95, { 0,1,0,1 });
+	Particle* p2 = new Particle({ 50,30,0 }, { 00,0,0 }, { 0,0,0 }, 0.95, { 0,0,1,1 });
 	ElasticBandFG* ebFG1 = new ElasticBandFG(p2, 10, 30);
 	ElasticBandFG* ebFG2 = new ElasticBandFG(p1, 10, 30);
 	forceReg->addRegistry(ebFG1, p1);
 	forceReg->addRegistry(ebFG2, p2);
 	particles.push_back(p1);
-	particles.push_back(p2);*/
+	particles.push_back(p2);
+	forceGenerators.push_back(ebFG1);
+	forceGenerators.push_back(ebFG2);*/
 
 	// Slinky
 	//generateSlinky();
 
 	// Buoyancy
-	Particle* cube = new Particle({ 0,20,0 }, { 0,0,0 }, { 0,0,0 }, 0.85, { 0,1,0,1 });
+	/*Particle* cube = new Particle({ 0,20,0 }, { 0,0,0 }, { 0,0,0 }, 0.85, { 0,1,0,1 });
 	cube->setAsCube();
 	particles.push_back(cube);
 	forceReg->addRegistry(gravityFG, cube);
 	BuoyancyFG* bFG = new BuoyancyFG(1, 0.01, 1000);
 	forceReg->addRegistry(bFG, cube);
+	forceGenerators.push_back(bFG);*/
 }
 
 void ParticleSystem::generateSlinky()

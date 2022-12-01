@@ -28,8 +28,8 @@ public:
 	double getK1Wind() { return k1Wind; }
 	double getK2Wind() { return k2Wind; }
 	Vector3 getVelocity() { return vel; }
-	void setAsCube() { renderItem = new RenderItem(CreateShape(PxBoxGeometry(1.0, 1.0, 1.0)), &pos, color); }
-	void setAsLiquidSurface(){ renderItem = new RenderItem(CreateShape(PxBoxGeometry(20.0, 0.02, 20.0)), &pos, color); }
+	void setAsCube() { DeregisterRenderItem(renderItem); renderItem = new RenderItem(CreateShape(PxBoxGeometry(1.0, 1.0, 1.0)), &pos, color); }
+	void setAsLiquidSurface(){ DeregisterRenderItem(renderItem); renderItem = new RenderItem(CreateShape(PxBoxGeometry(20.0, 0.02, 20.0)), &pos, color); }
 protected:
 	void clearForce() { force = { 0.0,0.0,0.0 }; }
 	PxTransform pos;
