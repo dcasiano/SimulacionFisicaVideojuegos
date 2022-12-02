@@ -30,12 +30,15 @@ public:
 	Vector3 getVelocity() { return vel; }
 	void setAsCube() { DeregisterRenderItem(renderItem); renderItem = new RenderItem(CreateShape(PxBoxGeometry(1.0, 1.0, 1.0)), &pos, color); }
 	void setAsLiquidSurface(){ DeregisterRenderItem(renderItem); renderItem = new RenderItem(CreateShape(PxBoxGeometry(20.0, 0.02, 20.0)), &pos, color); }
+	void setDamp(float value) { damp = value; }
+	void resetDamp() { damp = damp0; }
 protected:
 	void clearForce() { force = { 0.0,0.0,0.0 }; }
 	PxTransform pos;
 	Vector3 vel, const acc;
 	Vector3 force; // accumulated force
 	float damp; // damping
+	float damp0; // initial damping
 	Vector3 g; // gravity (m/s^2)
 	float mass; // (kg)
 	float invMass;

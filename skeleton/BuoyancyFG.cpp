@@ -25,5 +25,7 @@ void BuoyancyFG::updateForce(Particle* p, double duration)
 	else if (h0 - h > height * 0.5)immersed = 1.0; // totally immersed
 	else immersed = (h0 - h) / height + 0.5;
 	force.y = liquidDensity * volume * immersed * gravity;
+	if (immersed > 0)p->setDamp(0.02);
+	else p->resetDamp();
 	p->addForce(force);
 }
