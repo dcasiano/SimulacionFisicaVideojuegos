@@ -32,6 +32,9 @@ public:
 	void generateSpringDemo();
 	void increaseSpringK(double amount) { if (anchSprFG != nullptr)anchSprFG->increaseK(amount); }
 	void generateSlinky();
+	void setPxPhysics(PxPhysics* gPhysics) { this->gPhysics = gPhysics; }
+	void setPxScene(PxScene* gScene) { this->gScene = gScene; }
+	void WhirlwindActive() { if (whirlwindFG != nullptr)whirlwindFG->switchActive(); }
 	//void addParticleToRegistry(Particle* p){forceReg->addRegistry}
 	//void deleteParticleFromRegistry(Particle* p) { forceReg->deleteParticle(p); }
 private:
@@ -47,5 +50,10 @@ private:
 	WhirlwindForceGenerator* whirlwindFG;
 	ExplosionForceGenerator* explosionFG;
 	AnchoredSpringFG* anchSprFG;
+	PxPhysics* gPhysics;
+	PxScene* gScene;
+	const int maxRigidInstances = 100;
+	vector<PxRigidDynamic*>rdBodies;
+	vector<RenderItem*>rdBodiesRI;
 };
 

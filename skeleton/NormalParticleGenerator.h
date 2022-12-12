@@ -6,7 +6,7 @@ public:
 	NormalParticleGenerator(Vector3 pos, Vector3 vel, Vector3 posDesv, Vector3 velDesv, Vector3 acc);
 	~NormalParticleGenerator();
 	virtual list<Particle*>generateParticles();
-	virtual list<PxRigidDynamic*>generateRigidDynamicParticles(PxPhysics* gPhysics);
+	virtual list<PxRigidDynamic*>generateRigidDynamicParticles(PxPhysics* gPhysics, vector<RenderItem*>& renderItems);
 protected:
 	Vector3 velDesv, posDesv;
 	default_random_engine generator;

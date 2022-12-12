@@ -46,6 +46,10 @@ int score;
 //P2
 ParticleSystem* partSyst;
 
+//P5
+vector<RenderItem*>staticBodiesRI;
+void createStaticScene();
+
 // Initialize physics engine
 void initPhysics(bool interactive)
 {
@@ -79,6 +83,11 @@ void initPhysics(bool interactive)
 
 	//P2
 	partSyst = new ParticleSystem();
+	partSyst->setPxPhysics(gPhysics);
+	partSyst->setPxScene(gScene);
+
+	//P5
+	createStaticScene();
 	}
 
 void shoot(ShootType type) {
@@ -182,6 +191,8 @@ void cleanupPhysics(bool interactive)
 
 	//delete particle;
 	delete dartboard;
+	for (auto e : staticBodiesRI)DeregisterRenderItem(e);
+	staticBodiesRI.clear();
 	}
 
 // Function called when a key is pressed
@@ -224,12 +235,32 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case 'O':
 		partSyst->increaseSpringK(-100);
 		break;
+	case 'L':
+		partSyst->WhirlwindActive();
+		break;
 	default:
 		break;
 	}
 }
 
+// Scene for rigid bodies interactions
+void createStaticScene() {
+	// Floor
+	PxRigidStatic* floor = gPhysics->createRigidStatic(PxTransform({ 0, -20, 0 }));
+	PxShape* floorShape = CreateShape(PxBoxGeometry(100, 0.1, 100));
+	floor->attachShape(*floorShape);
+	RenderItem* floorRendIt = new RenderItem(floorShape, floor, { 0,1,0.5,0.2 });//0.8,0.52,0.24,1.0
+	staticBodiesRI.push_back(floorRendIt);
+	gScene->addActor(*floor);
 
+	//Wall
+	PxRigidStatic* wall = gPhysics->createRigidStatic(PxTransform({ 10, -10, -30 }));
+	PxShape* wallShape = CreateShape(PxBoxGeometry(40, 40, 5));
+	wall->attachShape(*wallShape);
+	RenderItem* wallRendIt = new RenderItem(wallShape, wall, { 0,1,1,0.2 });
+	staticBodiesRI.push_back(wallRendIt);
+	gScene->addActor(*wall);
+}
 
 
 

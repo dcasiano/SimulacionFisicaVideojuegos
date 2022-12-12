@@ -8,7 +8,7 @@ ParticleSystem::ParticleSystem()
 	vel = { 0.0,30.0,0.0 };
 	velWidth = { 10.0,0.0,10.0 };
 	acc = { 0.0,0.0,0.0 };
-	//particlesGenerators.push_back(new UniformParticleGenerator(pos, vel, posWidth, velWidth, acc));
+	particlesGenerators.push_back(new UniformParticleGenerator(pos, vel, posWidth, velWidth, acc));
 	//particlesGenerators.push_back(new NormalParticleGenerator(pos, vel, posWidth, velWidth, acc));
 	fireworkGenerator = new CircleGenerator();
 	forceReg = new ForceRegistry();
@@ -29,22 +29,36 @@ ParticleSystem::~ParticleSystem()
 	delete whirlwindFG;
 	delete anchSprFG;
 	forceGenerators.clear();
+	for (auto e : rdBodiesRI)DeregisterRenderItem(e);
+	rdBodiesRI.clear();
+	rdBodies.clear();
 }
 
 void ParticleSystem::update(double t)
 {
 	forceReg->updateForces(t);
-	//if (GetLastTime() > 3.0)forceReg->deleteForceGenerator(gravityFG);
+	
 
-	for (auto e : particlesGenerators) {
-		list<Particle*> part = e->generateParticles();
-		for (auto p : part) {
-			forceReg->addRegistry(gravityFG, p);
-			//forceReg->addRegistry(windFG, p);
-			//forceReg->addRegistry(whirlwindFG, p);
-			particles.push_back(p);
+	//for (auto e : particlesGenerators) {
+	//	list<Particle*> part = e->generateParticles();
+	//	for (auto p : part) {
+	//		forceReg->addRegistry(gravityFG, p);
+	//		//forceReg->addRegistry(windFG, p);
+	//		forceReg->addRegistry(whirlwindFG, p);
+	//		particles.push_back(p);
+	//	}
+	//}
+	// Rigid dynamic bodies
+	if (rdBodies.size() < maxRigidInstances) {
+		for (auto e : particlesGenerators) {
+			list<PxRigidDynamic*> bodies = e->generateRigidDynamicParticles(gPhysics, rdBodiesRI);
+			for (auto rdb : bodies) {
+				rdBodies.push_back(rdb);
+				gScene->addActor(*rdb);
+			}
 		}
 	}
+	for (auto e : rdBodies)whirlwindFG->updateForceRDBody(e);
 	
 	for (int i = 0; i < particles.size(); i++) {
 		particles.at(i)->integrate(t);
@@ -111,20 +125,21 @@ void ParticleSystem::generateTestParticles(int num, const Vector3& pos, double r
 void ParticleSystem::generateExplosion()
 {
 	for (auto p : particles) {
-		explosionFG->setInitialTime(GetLastTime());
 		forceReg->addRegistry(explosionFG, p);
 	}
+	explosionFG->setInitialTime(GetLastTime());
+	for (auto e : rdBodies)explosionFG->generateExplotionForRDBody(e);
 }
 
 void ParticleSystem::generateSpringDemo()
 {
 	// Anchored spring
-	Particle* p = new Particle({ -10,20,0 }, { 0,0,0 }, { 0,0,0 }, 0.85, { 0,1,0,1 });
+	/*Particle* p = new Particle({ -10,20,0 }, { 0,0,0 }, { 0,0,0 }, 0.85, { 0,1,0,1 });
 	anchSprFG = new AnchoredSpringFG(10, 10, { 10,20,0 });
 	forceReg->addRegistry(anchSprFG, p);
 	forceReg->addRegistry(gravityFG, p);
 	particles.push_back(p);
-	forceGenerators.push_back(anchSprFG);
+	forceGenerators.push_back(anchSprFG);*/
 
 	// Elastic band
 	/*Particle* p1 = new Particle({ -50,30,0 }, { -00,0,0 }, { 0,0,0 }, 0.95, { 0,1,0,1 });
