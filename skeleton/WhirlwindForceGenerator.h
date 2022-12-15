@@ -11,6 +11,6 @@ public:
 	void switchActive() { isActive = !isActive; }
 protected:
 	double K;
-	bool isActive = true;
+	bool isActive = false;
 };
 

@@ -37,7 +37,7 @@ void ExplosionForceGenerator::generateExplotionForRDBody(PxRigidDynamic* rdb)
 		Vector3 partPos = rdb->getGlobalPose().p;
 		float r = pow(partPos.x - pos.x, 2) + pow(partPos.y - pos.y, 2) + pow(partPos.z - pos.z, 2);
 		PxVec3 force = { partPos.x - pos.x, partPos.y - pos.y, partPos.z - pos.z };
-		force *= 1000*K / pow(r, 2) * exp(-t / tau);
+		force *= 1000 * K / pow(r, 2) * exp(-t / tau);
 		rdb->addForce(force);
 	}
 }
