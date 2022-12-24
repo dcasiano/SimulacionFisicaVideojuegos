@@ -13,6 +13,7 @@
 #include "Particle.h"
 #include "Dartboard.h"
 #include "ParticleSystem.h"
+#include "CameraRDB.h"
 
 
 using namespace physx;
@@ -50,6 +51,8 @@ ParticleSystem* partSyst;
 vector<RenderItem*>staticBodiesRI;
 void createStaticScene();
 
+CameraRDB* camRDB;
+
 // Initialize physics engine
 void initPhysics(bool interactive)
 {
@@ -67,7 +70,7 @@ void initPhysics(bool interactive)
 
 	// For Solid Rigids +++++++++++++++++++++++++++++++++++++
 	PxSceneDesc sceneDesc(gPhysics->getTolerancesScale());
-	sceneDesc.gravity = PxVec3(0.0f, -9.8f, 0.0f);
+	sceneDesc.gravity = PxVec3(0.0f, -98.0f, 0.0f);
 	gDispatcher = PxDefaultCpuDispatcherCreate(2);
 	sceneDesc.cpuDispatcher = gDispatcher;
 	sceneDesc.filterShader = contactReportFilterShader;
@@ -88,6 +91,7 @@ void initPhysics(bool interactive)
 
 	//P5
 	createStaticScene();
+	camRDB = new CameraRDB(gPhysics, gScene);
 	}
 
 void shoot(ShootType type) {
@@ -170,6 +174,7 @@ void stepPhysics(bool interactive, double t)
 
 	//P2
 	partSyst->update(t);
+	camRDB->update(t);
 }
 
 // Function to clean data
@@ -193,6 +198,7 @@ void cleanupPhysics(bool interactive)
 	delete dartboard;
 	for (auto e : staticBodiesRI)DeregisterRenderItem(e);
 	staticBodiesRI.clear();
+	delete camRDB;
 	}
 
 // Function called when a key is pressed
@@ -237,6 +243,21 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		break;
 	case 'L':
 		partSyst->WhirlwindActive();
+		break;
+	case 32:
+		camRDB->jump();
+		break;
+	case 'W':
+		camRDB->moveForward();
+		break;
+	case 'S':
+		camRDB->moveBackward();
+		break;
+	case 'A':
+		camRDB->moveLeft();
+		break;
+	case 'D':
+		camRDB->moveRight();
 		break;
 	default:
 		break;

@@ -29,6 +29,7 @@
     <ClCompile Include="AnchoredSpringFG.cpp" />
     <ClCompile Include="ElasticBandFG.cpp" />
     <ClCompile Include="BuoyancyFG.cpp" />
+    <ClCompile Include="CameraRDB.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -60,6 +61,7 @@
     <ClInclude Include="AnchoredSpringFG.h" />
     <ClInclude Include="ElasticBandFG.h" />
     <ClInclude Include="BuoyancyFG.h" />
+    <ClInclude Include="CameraRDB.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

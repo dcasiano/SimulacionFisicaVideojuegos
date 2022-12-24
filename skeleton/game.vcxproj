@@ -257,6 +257,7 @@
     <ClCompile Include="Axis.cpp" />
     <ClCompile Include="BuoyancyFG.cpp" />
     <ClCompile Include="callbacks.cpp" />
+    <ClCompile Include="CameraRDB.cpp" />
     <ClCompile Include="CircleGenerator.cpp" />
     <ClCompile Include="Dartboard.cpp" />
     <ClCompile Include="ElasticBandFG.cpp" />
@@ -283,6 +284,7 @@
     <ClInclude Include="Axis.h" />
     <ClInclude Include="BuoyancyFG.h" />
     <ClInclude Include="callbacks.hpp" />
+    <ClInclude Include="CameraRDB.h" />
     <ClInclude Include="CircleGenerator.h" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="Dartboard.h" />

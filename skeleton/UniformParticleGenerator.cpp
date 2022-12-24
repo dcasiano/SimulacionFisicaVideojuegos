@@ -69,6 +69,7 @@ list<PxRigidDynamic*> UniformParticleGenerator::generateRigidDynamicParticles(Px
 			PxTransform pos = PxTransform(generationPos + desvPos);
 			Vector3 linearVel = vel + desvVel;
 			PxRigidDynamic* rdb = gPhysics->createRigidDynamic(pos);
+			
 			rdb->setLinearVelocity(linearVel);
 			rdb->setAngularVelocity({ 1.0,1.0,1.0 });
 			//float size = abs((float)d(generator)) * 1 + 1.0f;

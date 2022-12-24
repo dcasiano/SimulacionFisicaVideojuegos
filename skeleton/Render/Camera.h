@@ -32,7 +32,7 @@
 #define PHYSX_SNIPPET_CAMERA_H
 
 #include "foundation/PxTransform.h"
-
+using namespace physx;
 namespace Snippets
 {
 class Camera
@@ -44,6 +44,7 @@ public:
 	bool				handleKey(unsigned char key, int x, int y, float speed = 1.0f);
 	void				handleMotion(int x, int y);
 	void				handleAnalogMove(float x, float y);
+	void setPosition(PxVec3 pos);
 
 	physx::PxVec3		getEye()	const;
 	physx::PxVec3		getDir()	const;
@@ -53,6 +54,7 @@ private:
 	physx::PxVec3	mDir;
 	int				mMouseX;
 	int				mMouseY;
+	//c
 };
 
 
