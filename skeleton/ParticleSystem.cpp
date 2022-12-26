@@ -32,7 +32,7 @@ ParticleSystem::~ParticleSystem()
 	forceGenerators.clear();
 	for (auto e : rdBodiesRI)DeregisterRenderItem(e);
 	rdBodiesRI.clear();
-	rdBodies.clear();
+	rdParticles.clear();
 	delete shootPartGen;
 }
 
@@ -51,16 +51,16 @@ void ParticleSystem::update(double t)
 	//	}
 	//}
 	// Rigid dynamic bodies
-	if (rdBodies.size() < maxRigidInstances) {
+	if (rdParticles.size() < maxRigidInstances) {
 		for (auto e : particlesGenerators) {
-			list<PxRigidDynamic*> bodies = e->generateRigidDynamicParticles(gPhysics, rdBodiesRI);
+			list<RigidDynamicParticle*> bodies = e->generateRigidDynamicParticles(gPhysics, rdBodiesRI);
 			for (auto rdb : bodies) {
-				rdBodies.push_back(rdb);
-				gScene->addActor(*rdb);
+				rdParticles.push_back(rdb);
+				gScene->addActor(*rdb->getRigidDynamicBody());
 			}
 		}
 	}
-	for (auto e : rdBodies)whirlwindFG->updateForceRDBody(e);
+	for (auto e : rdParticles)whirlwindFG->updateForceRDBody(e->getRigidDynamicBody());
 	
 	for (int i = 0; i < particles.size(); i++) {
 		particles.at(i)->integrate(t);
@@ -70,6 +70,13 @@ void ParticleSystem::update(double t)
 			particles.erase(particles.begin() + i);
 		}
 		
+	}
+	for (int i = 0; i < rdParticles.size(); i++) {
+		if (rdParticles.at(i)->hasToDie()) {
+			delete rdParticles.at(i);
+			rdParticles.erase(rdParticles.begin() + i);
+		}
+
 	}
 
 	// Fireworks
@@ -130,7 +137,7 @@ void ParticleSystem::generateExplosion()
 		forceReg->addRegistry(explosionFG, p);
 	}
 	explosionFG->setInitialTime(GetLastTime());
-	for (auto e : rdBodies)explosionFG->generateExplotionForRDBody(e);
+	for (auto e : rdParticles)explosionFG->generateExplotionForRDBody(e->getRigidDynamicBody());
 }
 
 void ParticleSystem::generateSpringDemo()
@@ -202,10 +209,10 @@ void ParticleSystem::generateSlinky()
 void ParticleSystem::shootBullet()
 {
 	if (shootPartGen->canShoot()) {
-		list<PxRigidDynamic*> bodies = shootPartGen->generateRigidDynamicParticles(gPhysics, rdBodiesRI);
+		list<RigidDynamicParticle*> bodies = shootPartGen->generateRigidDynamicParticles(gPhysics, rdBodiesRI);
 		for (auto rdb : bodies) {
-			rdBodies.push_back(rdb);
-			gScene->addActor(*rdb);
+			rdParticles.push_back(rdb);
+			gScene->addActor(*rdb->getRigidDynamicBody());
 		}
 	}
 }

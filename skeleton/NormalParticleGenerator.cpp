@@ -37,9 +37,9 @@ list<Particle*> NormalParticleGenerator::generateParticles()
 	return particles;
 }
 
-list<PxRigidDynamic*> NormalParticleGenerator::generateRigidDynamicParticles(PxPhysics* gPhysics, vector<RenderItem*>& renderItems)
+list<RigidDynamicParticle*> NormalParticleGenerator::generateRigidDynamicParticles(PxPhysics* gPhysics, vector<RenderItem*>& renderItems)
 {
-	list<PxRigidDynamic*>particles;
+	list<RigidDynamicParticle*>particles;
 	for (int i = 0; i < numParticles; i++) {
 		if (abs(d(generator)) < generationProb) {
 			Vector3 vel = { 0.0,0.0,-30.0 };
@@ -50,22 +50,20 @@ list<PxRigidDynamic*> NormalParticleGenerator::generateRigidDynamicParticles(PxP
 			Vector3 desvVel = { (float)d(generator) * velWidth.x,(float)d(generator) * velWidth.y ,(float)d(generator) * velWidth.z };
 			PxTransform pos = PxTransform(generationPos + desvPos);
 			Vector3 linearVel = vel + desvVel;
-			PxRigidDynamic* rdb = gPhysics->createRigidDynamic(pos);
-			rdb->setLinearVelocity(linearVel);
-			rdb->setAngularVelocity({ 1.0,1.0,1.0 });
+			Vector4 color = { 1,0,0,1.0 };
 			Vector3 size = { 1.0,1.0,1.0 };
 			PxShape* shape = CreateShape(PxBoxGeometry(size));
 			//PxShape* shape = CreateShape(PxSphereGeometry(1.0));
 			float staticFriction = (float)d(generator) * 1.0f;
 			PxMaterial* const mat= gPhysics->createMaterial(staticFriction, (float)d(generator), (float)d(generator)*5.0f);
 			shape->setMaterials(&mat, 1);
-			rdb->attachShape(*shape);
-			rdb->setMass(mass);
-			rdb->setMassSpaceInertiaTensor({ size.y * size.z,size.x * size.z,size.x * size.y });
-			Vector4 color = { 1,0,0,1.0 };
-			RenderItem* rendIt = new RenderItem(shape, rdb, color);
-			renderItems.push_back(rendIt);
-			particles.push_back(rdb);
+			RigidDynamicParticle* rdp = new RigidDynamicParticle(pos, shape, color, gPhysics);
+			rdp->setLinearVelocity(linearVel);
+			rdp->setAngularVelocity({ 1.0,1.0,1.0 });
+			rdp->setMass(mass);
+			rdp->setMassSpaceInertiaTensor({ size.y * size.z,size.x * size.z,size.x * size.y });
+			renderItems.push_back(rdp->getRenderItem());
+			particles.push_back(rdp);
 		}
 
 	}

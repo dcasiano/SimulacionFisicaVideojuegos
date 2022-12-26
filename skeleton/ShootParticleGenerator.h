@@ -6,7 +6,7 @@ public:
 	ShootParticleGenerator();
 	~ShootParticleGenerator();
 	virtual list<Particle*>generateParticles(){ return list<Particle*>(); }
-	virtual list<PxRigidDynamic*>generateRigidDynamicParticles(PxPhysics* gPhysics, vector<RenderItem*>& renderItems);
+	virtual list<RigidDynamicParticle*>generateRigidDynamicParticles(PxPhysics* gPhysics, vector<RenderItem*>& renderItems);
 	bool canShoot() { return lastShotTime + shootCooldown < GetLastTime(); }
 protected:
 	double shootCooldown, lastShotTime;

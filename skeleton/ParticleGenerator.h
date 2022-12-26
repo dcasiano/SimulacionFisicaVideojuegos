@@ -21,7 +21,7 @@ public:
 	void setDamp(float value) { damp = value; }
 	void setMass(float value) { mass = value; }
 	void setColor(Vector4 color_) { color = color_; }
-	virtual list<PxRigidDynamic*>generateRigidDynamicParticles(PxPhysics* gPhysics, vector<RenderItem*>&renderItems){ return list<PxRigidDynamic*>(); }
+	virtual list<RigidDynamicParticle*>generateRigidDynamicParticles(PxPhysics* gPhysics, vector<RenderItem*>& renderItems);
 	
 protected:
 	Particle* model;

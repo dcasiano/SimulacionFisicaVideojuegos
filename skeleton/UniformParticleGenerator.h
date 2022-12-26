@@ -6,7 +6,7 @@ public:
 	UniformParticleGenerator(Vector3 pos, Vector3 vel, Vector3 posWidth, Vector3 velWidth, Vector3 acc);
 	~UniformParticleGenerator();
 	virtual list<Particle*>generateParticles();
-	virtual list<PxRigidDynamic*>generateRigidDynamicParticles(PxPhysics* gPhysics, vector<RenderItem*>& renderItems);
+	virtual list<RigidDynamicParticle*>generateRigidDynamicParticles(PxPhysics* gPhysics, vector<RenderItem*>& renderItems);
 protected:
 	Vector3 velWidth, posWidth;
 	default_random_engine generator;

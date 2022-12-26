@@ -37,9 +37,9 @@ list<Particle*> UniformParticleGenerator::generateParticles()
 	return particles;
 }
 
-list<PxRigidDynamic*> UniformParticleGenerator::generateRigidDynamicParticles(PxPhysics* gPhysics, vector<RenderItem*>& renderItems)
+list<RigidDynamicParticle*> UniformParticleGenerator::generateRigidDynamicParticles(PxPhysics* gPhysics, vector<RenderItem*>& renderItems)
 {
-	list<PxRigidDynamic*>particles;
+	list<RigidDynamicParticle*>particles;
 	for (int i = 0; i < numParticles; i++) {
 		if (abs(d(generator)) < generationProb) {
 			/*Vector3 desvPos = { (float)d(generator) * posWidth.x,(float)d(generator) * posWidth.y ,(float)d(generator) * posWidth.z };
@@ -68,10 +68,7 @@ list<PxRigidDynamic*> UniformParticleGenerator::generateRigidDynamicParticles(Px
 			Vector3 desvVel = { (float)d(generator) * velWidth.x,(float)d(generator) * velWidth.y ,(float)d(generator) * velWidth.z };
 			PxTransform pos = PxTransform(generationPos + desvPos);
 			Vector3 linearVel = vel + desvVel;
-			PxRigidDynamic* rdb = gPhysics->createRigidDynamic(pos);
-			
-			rdb->setLinearVelocity(linearVel);
-			rdb->setAngularVelocity({ 1.0,1.0,1.0 });
+			Vector4 color = { 1,0,0,1.0 };
 			//float size = abs((float)d(generator)) * 1 + 1.0f;
 			float size = 1.0f;
 			Vector3 sizeV = { size,size,size };
@@ -80,13 +77,14 @@ list<PxRigidDynamic*> UniformParticleGenerator::generateRigidDynamicParticles(Px
 			float staticFriction = (float)d(generator) * 1.0f;
 			PxMaterial* const mat = gPhysics->createMaterial(abs((float)d(generator)), abs((float)d(generator)), abs((float)d(generator)) * 3.0f);
 			shape->setMaterials(&mat, 1);
-			rdb->attachShape(*shape);
-			rdb->setMass(mass);
-			rdb->setMassSpaceInertiaTensor({ sizeV.y * sizeV.z,sizeV.x * sizeV.z,sizeV.x * sizeV.y });
-			Vector4 color = { 1,0,0,1.0 };
-			RenderItem* rendIt = new RenderItem(shape, rdb, color);
-			renderItems.push_back(rendIt);
-			particles.push_back(rdb);
+			RigidDynamicParticle* rdp = new RigidDynamicParticle(pos, shape, color, gPhysics);
+			
+			rdp->setLinearVelocity(linearVel);
+			rdp->setAngularVelocity({ 1.0,1.0,1.0 });
+			rdp->setMass(mass);
+			rdp->setMassSpaceInertiaTensor({ sizeV.y * sizeV.z,sizeV.x * sizeV.z,sizeV.x * sizeV.y });
+			renderItems.push_back(rdp->getRenderItem());
+			particles.push_back(rdp);
 		}
 
 	}

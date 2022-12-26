@@ -18,6 +18,7 @@
 #include "ElasticBandFG.h"
 #include "BuoyancyFG.h"
 #include "ShootParticleGenerator.h"
+#include "RigidDynamicParticle.h"
 
 using namespace physx;
 using namespace std;
@@ -55,7 +56,7 @@ private:
 	PxPhysics* gPhysics;
 	PxScene* gScene;
 	const int maxRigidInstances = 100;
-	vector<PxRigidDynamic*>rdBodies;
+	vector<RigidDynamicParticle*>rdParticles;
 	vector<RenderItem*>rdBodiesRI;
 	ShootParticleGenerator* shootPartGen;
 };
