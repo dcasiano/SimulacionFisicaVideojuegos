@@ -17,6 +17,7 @@
 #include "AnchoredSpringFG.h"
 #include "ElasticBandFG.h"
 #include "BuoyancyFG.h"
+#include "ShootParticleGenerator.h"
 
 using namespace physx;
 using namespace std;
@@ -37,6 +38,7 @@ public:
 	void WhirlwindActive() { if (whirlwindFG != nullptr)whirlwindFG->switchActive(); }
 	//void addParticleToRegistry(Particle* p){forceReg->addRegistry}
 	//void deleteParticleFromRegistry(Particle* p) { forceReg->deleteParticle(p); }
+	void shootBullet();
 private:
 	//list<Particle*>particles;
 	vector<Particle*>particles;
@@ -55,5 +57,6 @@ private:
 	const int maxRigidInstances = 100;
 	vector<PxRigidDynamic*>rdBodies;
 	vector<RenderItem*>rdBodiesRI;
+	ShootParticleGenerator* shootPartGen;
 };
 

@@ -30,6 +30,8 @@
     <ClCompile Include="ElasticBandFG.cpp" />
     <ClCompile Include="BuoyancyFG.cpp" />
     <ClCompile Include="CameraRDB.cpp" />
+    <ClCompile Include="ShootParticleGenerator.cpp" />
+    <ClCompile Include="RigidDynamicParticle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -62,6 +64,8 @@
     <ClInclude Include="ElasticBandFG.h" />
     <ClInclude Include="BuoyancyFG.h" />
     <ClInclude Include="CameraRDB.h" />
+    <ClInclude Include="ShootParticleGenerator.h" />
+    <ClInclude Include="RigidDynamicParticle.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

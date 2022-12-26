@@ -2,6 +2,7 @@
 #include "core.hpp"
 #include "RenderUtils.hpp"
 #include "Particle.h"
+#include "RigidDynamicParticle.h"
 #include <string>
 #include <list>
 #include <random>

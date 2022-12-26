@@ -209,7 +209,8 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	switch(toupper(key))
 	{
 	case 'F':
-		shoot(sType);
+		//shoot(sType);
+		partSyst->shootBullet();
 		break;
 	case '1':
 		sType = Pistol;

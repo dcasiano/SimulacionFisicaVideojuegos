@@ -18,6 +18,7 @@ ParticleSystem::ParticleSystem()
 	explosionFG = new ExplosionForceGenerator(10000, { 0,30,0 }, 20, 343);
 	anchSprFG = nullptr;
 	generateSpringDemo();
+	shootPartGen = new ShootParticleGenerator();
 }
 
 ParticleSystem::~ParticleSystem()
@@ -32,6 +33,7 @@ ParticleSystem::~ParticleSystem()
 	for (auto e : rdBodiesRI)DeregisterRenderItem(e);
 	rdBodiesRI.clear();
 	rdBodies.clear();
+	delete shootPartGen;
 }
 
 void ParticleSystem::update(double t)
@@ -195,4 +197,15 @@ void ParticleSystem::generateSlinky()
 	particles.push_back(p3);
 	forceGenerators.push_back(ebFG23);
 	forceGenerators.push_back(ebFG32);
+}
+
+void ParticleSystem::shootBullet()
+{
+	if (shootPartGen->canShoot()) {
+		list<PxRigidDynamic*> bodies = shootPartGen->generateRigidDynamicParticles(gPhysics, rdBodiesRI);
+		for (auto rdb : bodies) {
+			rdBodies.push_back(rdb);
+			gScene->addActor(*rdb);
+		}
+	}
 }
