@@ -8,17 +8,19 @@ ParticleSystem::ParticleSystem()
 	vel = { 0.0,30.0,0.0 };
 	velWidth = { 10.0,0.0,10.0 };
 	acc = { 0.0,0.0,0.0 };
-	particlesGenerators.push_back(new UniformParticleGenerator(pos, vel, posWidth, velWidth, acc));
+	//particlesGenerators.push_back(new UniformParticleGenerator(pos, vel, posWidth, velWidth, acc));
 	//particlesGenerators.push_back(new NormalParticleGenerator(pos, vel, posWidth, velWidth, acc));
 	fireworkGenerator = new CircleGenerator();
 	forceReg = new ForceRegistry();
 	gravityFG = new GravityForceGenerator({ 0.0,-9.8,0.0 });
-	windFG = new WindForceGenerator({ 80,0,0 }, { 0,30,0 }, 15);
+	windFG = new WindForceGenerator({ 100,0,0 }, { 20.0,10.0,-40.0 }, 60);
 	whirlwindFG = new WhirlwindForceGenerator(5, { 0,30,0 }, 100);
-	explosionFG = new ExplosionForceGenerator(10000, { 0,30,0 }, 20, 343);
+	explosionFG = new ExplosionForceGenerator(1000000, { 9, -13, 170 }, 20, 343);
 	anchSprFG = nullptr;
 	generateSpringDemo();
 	shootPartGen = new ShootParticleGenerator();
+	score = 0;
+	rdWallGen = new RDWallGenerator();
 }
 
 ParticleSystem::~ParticleSystem()
@@ -34,6 +36,10 @@ ParticleSystem::~ParticleSystem()
 	rdBodiesRI.clear();
 	rdParticles.clear();
 	delete shootPartGen;
+	bullets.clear();
+	wallParts.clear();
+	particles.clear();
+	dartboardMotionGuide.clear();
 }
 
 void ParticleSystem::update(double t)
@@ -51,7 +57,7 @@ void ParticleSystem::update(double t)
 	//	}
 	//}
 	// Rigid dynamic bodies
-	if (rdParticles.size() < maxRigidInstances) {
+	/*if (rdParticles.size() < maxRigidInstances) {
 		for (auto e : particlesGenerators) {
 			list<RigidDynamicParticle*> bodies = e->generateRigidDynamicParticles(gPhysics, rdBodiesRI);
 			for (auto rdb : bodies) {
@@ -59,8 +65,8 @@ void ParticleSystem::update(double t)
 				gScene->addActor(*rdb->getRigidDynamicBody());
 			}
 		}
-	}
-	for (auto e : rdParticles)whirlwindFG->updateForceRDBody(e->getRigidDynamicBody());
+	}*/
+	//for (auto e : rdParticles)whirlwindFG->updateForceRDBody(e->getRigidDynamicBody());
 	
 	for (int i = 0; i < particles.size(); i++) {
 		particles.at(i)->integrate(t);
@@ -77,6 +83,32 @@ void ParticleSystem::update(double t)
 			rdParticles.erase(rdParticles.begin() + i);
 		}
 
+	}
+	for (int i = 0; i < wallParts.size(); i++) {
+		if (wallSleeping && !wallParts.at(i)->getRigidDynamicBody()->isSleeping()) {
+			wallHitTime = GetLastTime();
+			wallSleeping = false;
+		}
+
+	}
+	if (!wallSleeping && !wallIsDestroyed && wallHitTime + 2.0 < GetLastTime()) {
+		destroyWall();
+	}
+	for (int i = 0; i < dartboardMotionGuide.size(); i++) {
+		dartboardMotionGuide.at(i)->integrate(t);
+
+	}
+	dartboard->setPositionX(dartboardMotionGuide[0]->getPosition().x);
+	for (int i = 0; i < bullets.size(); i++) {
+		int auxScore = dartboard->score(bullets.at(i)->getRigidDynamicBody()->getGlobalPose().p);
+		windFG->updateForceRDBody(bullets.at(i)->getRigidDynamicBody());
+		bool detButHit = detButton->hit(bullets.at(i)->getRigidDynamicBody()->getGlobalPose().p);
+		if (detButHit)generateExplosion();
+		if (auxScore > 0 || detButHit || bullets.at(i)->hasToDie()) {
+			score += auxScore;
+			delete bullets.at(i);
+			bullets.erase(bullets.begin() + i);
+		}
 	}
 
 	// Fireworks
@@ -102,10 +134,15 @@ void ParticleSystem::update(double t)
 
 void ParticleSystem::shootFirework()
 {
-	Firework* fw = new Firework({ -100,-100,-100 }, { 0,80,0 }, { 0,-10,0 }, 0.99f, { 1,0,0,1 }, 0, 2);
+	Firework* fw = new Firework({ -80,00,-100 }, { 0,80,0 }, { 0,-10,0 }, 0.99f, { 1,0,0,1 }, 0, 2);
 	fw->setSpawnTime(GetLastTime());
 	fw->setLifeTime(2.0);
 	fireworks.push_back(fw);
+
+	Firework* fw2 = new Firework({ 120,00,-100 }, { 0,80,0 }, { 0,-10,0 }, 0.99f, { 1,0,0,1 }, 0, 2);
+	fw2->setSpawnTime(GetLastTime());
+	fw2->setLifeTime(2.0);
+	fireworks.push_back(fw2);
 }
 
 void ParticleSystem::generateTestParticles(int num, const Vector3& pos, double r)
@@ -138,6 +175,7 @@ void ParticleSystem::generateExplosion()
 	}
 	explosionFG->setInitialTime(GetLastTime());
 	for (auto e : rdParticles)explosionFG->generateExplotionForRDBody(e->getRigidDynamicBody());
+	for (auto e : wallParts)explosionFG->generateExplotionForRDBody(e->getRigidDynamicBody());
 }
 
 void ParticleSystem::generateSpringDemo()
@@ -173,6 +211,9 @@ void ParticleSystem::generateSpringDemo()
 	BuoyancyFG* bFG = new BuoyancyFG(1, 0.01, 1000);
 	forceReg->addRegistry(bFG, cube);
 	forceGenerators.push_back(bFG);*/
+
+
+	
 }
 
 void ParticleSystem::generateSlinky()
@@ -211,8 +252,46 @@ void ParticleSystem::shootBullet()
 	if (shootPartGen->canShoot()) {
 		list<RigidDynamicParticle*> bodies = shootPartGen->generateRigidDynamicParticles(gPhysics, rdBodiesRI);
 		for (auto rdb : bodies) {
-			rdParticles.push_back(rdb);
+			bullets.push_back(rdb);
 			gScene->addActor(*rdb->getRigidDynamicBody());
 		}
 	}
+}
+
+int ParticleSystem::getScore()
+{
+	int auxScore = score;
+	score = 0;
+	return auxScore;
+}
+
+void ParticleSystem::createRDWall()
+{
+	list<RigidDynamicParticle*> bodies = rdWallGen->generateRigidDynamicParticles(gPhysics, rdBodiesRI);
+	for (auto rdb : bodies) {
+		wallParts.push_back(rdb);
+		gScene->addActor(*rdb->getRigidDynamicBody());
+		rdb->getRigidDynamicBody()->putToSleep();
+	}
+}
+
+void ParticleSystem::destroyWall()
+{
+	for (auto e : wallParts)delete e;
+	wallParts.clear();
+	wallIsDestroyed = true;
+}
+
+void ParticleSystem::generateDartboardMotion()
+{
+	Particle* p1 = new Particle({ -2,-20,50 }, { -00,0,0 }, { 0,0,0 }, 0.95, { 0,1,0,1 });
+	Particle* p2 = new Particle({ 38,-20,50 }, { 00,0,0 }, { 0,0,0 }, 0.95, { 0,0,1,1 });
+	ElasticBandFG* ebFG1 = new ElasticBandFG(p2, 2, 20);
+	ElasticBandFG* ebFG2 = new ElasticBandFG(p1, 2, 20);
+	forceReg->addRegistry(ebFG1, p1);
+	forceReg->addRegistry(ebFG2, p2);
+	dartboardMotionGuide.push_back(p1);
+	dartboardMotionGuide.push_back(p2);
+	forceGenerators.push_back(ebFG1);
+	forceGenerators.push_back(ebFG2);
 }

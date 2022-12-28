@@ -32,6 +32,9 @@
     <ClCompile Include="CameraRDB.cpp" />
     <ClCompile Include="ShootParticleGenerator.cpp" />
     <ClCompile Include="RigidDynamicParticle.cpp" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="RDWallGenerator.cpp" />
+    <ClCompile Include="DetonationButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -66,6 +69,9 @@
     <ClInclude Include="CameraRDB.h" />
     <ClInclude Include="ShootParticleGenerator.h" />
     <ClInclude Include="RigidDynamicParticle.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="RDWallGenerator.h" />
+    <ClInclude Include="DetonationButton.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

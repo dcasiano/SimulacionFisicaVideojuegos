@@ -17,14 +17,13 @@ list<RigidDynamicParticle*> ShootParticleGenerator::generateRigidDynamicParticle
 	PxTransform pos = GetCamera()->getTransform();
 	PxVec3 dir = GetCamera()->getDir();
 	pos.p += dir; // offset so projectile doesnt connect with CameraRDB
-	Vector3 vel = 60.0f * dir;
+	Vector3 vel = 120.0f * dir;
 
 	float size = 0.5f;
 	PxShape* shape = CreateShape(PxSphereGeometry(size));
-	//float staticFriction = (float)d(generator) * 1.0f;
 	PxMaterial* const mat = gPhysics->createMaterial(1, 0, -100);
 	shape->setMaterials(&mat, 1);
-	Vector4 color = { 1,0,0,1.0 };
+	Vector4 color = { 0,1,0,1.0 };
 	RigidDynamicParticle* rdp = new RigidDynamicParticle(pos, shape, color, gPhysics);
 
 	rdp->setLinearVelocity(vel);

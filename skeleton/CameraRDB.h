@@ -16,6 +16,7 @@ public:
 	bool isOnFloor() { return abs(rdbCam->getLinearVelocity().y) < 0.1; }
 protected:
 	PxRigidDynamic* rdbCam;
-	const float speed = 20.0f;
+	const float speed = 40.0f;
+	PxTransform spawnPos;
 };
 

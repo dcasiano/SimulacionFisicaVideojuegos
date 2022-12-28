@@ -19,6 +19,9 @@
 #include "BuoyancyFG.h"
 #include "ShootParticleGenerator.h"
 #include "RigidDynamicParticle.h"
+#include "Dartboard.h"
+#include "RDWallGenerator.h"
+#include "DetonationButton.h"
 
 using namespace physx;
 using namespace std;
@@ -40,6 +43,13 @@ public:
 	//void addParticleToRegistry(Particle* p){forceReg->addRegistry}
 	//void deleteParticleFromRegistry(Particle* p) { forceReg->deleteParticle(p); }
 	void shootBullet();
+	void setDartboard(Dartboard* dartboard) { this->dartboard = dartboard; }
+	int getScore();
+	void setWindVelocity(const Vector3& windVel) { windFG->setWindVelocity(windVel); }
+	void createRDWall();
+	void destroyWall();
+	void setDetonationButton(DetonationButton* detButton) { this->detButton = detButton; }
+	void generateDartboardMotion();
 private:
 	//list<Particle*>particles;
 	vector<Particle*>particles;
@@ -59,5 +69,15 @@ private:
 	vector<RigidDynamicParticle*>rdParticles;
 	vector<RenderItem*>rdBodiesRI;
 	ShootParticleGenerator* shootPartGen;
+	vector<RigidDynamicParticle*>bullets;
+	Dartboard* dartboard;
+	int score;
+	RDWallGenerator* rdWallGen;
+	vector<RigidDynamicParticle*>wallParts;
+	double wallHitTime;
+	bool wallSleeping = true;
+	bool wallIsDestroyed = false;
+	DetonationButton* detButton;
+	vector<Particle*>dartboardMotionGuide;
 };
 

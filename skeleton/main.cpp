@@ -14,6 +14,8 @@
 #include "Dartboard.h"
 #include "ParticleSystem.h"
 #include "CameraRDB.h"
+#include "GameManager.h"
+#include "DetonationButton.h"
 
 
 using namespace physx;
@@ -52,6 +54,13 @@ vector<RenderItem*>staticBodiesRI;
 void createStaticScene();
 
 CameraRDB* camRDB;
+GameManager* gameManager;
+
+RenderItem* windActiveIndicator;
+Vector4 windActiveColor, windInactiveColor;
+PxTransform windIndTranf(20.0, 30.0, -45.0);
+
+DetonationButton* detButton;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -78,20 +87,34 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 
 	//particle = new Particle({ -50.0,0.0,0.0 }, { 10.0,0.0,0.0 }, { 0.0,2.0,0.0 },0.988);
-	//dartboard = new Dartboard(15.0, { 50.0,50.0,-30.0 });
+	dartboard = new Dartboard(15.0, { 20.0,10.0,-40.0 });
 	sType = Pistol;
 	shootCooldown = 0.5;
 	lastShotTime = -shootCooldown;
 	score = 0;
 
-	//P2
 	partSyst = new ParticleSystem();
 	partSyst->setPxPhysics(gPhysics);
 	partSyst->setPxScene(gScene);
 
-	//P5
 	createStaticScene();
 	camRDB = new CameraRDB(gPhysics, gScene);
+	partSyst->setDartboard(dartboard);
+	gameManager = new GameManager();
+	gameManager->setPartSyst(partSyst);
+	partSyst->createRDWall();
+
+	windActiveColor = { 0,1,0,1.0 };
+	windInactiveColor = { 1,0,0,1.0 };
+	
+	PxShape* windIndShape = CreateShape(PxBoxGeometry(6, 2, 2));
+	windActiveIndicator = new RenderItem(windIndShape, &windIndTranf, windActiveColor);
+	gameManager->setWindActiveIndicator(windActiveIndicator);
+	//cout << windActiveIndicator->transform->p.x << " " << windActiveIndicator->transform->p.y << " " << windActiveIndicator->transform->p.z << "\n";
+
+	detButton = new DetonationButton({ -5, -10, 170 });
+	partSyst->setDetonationButton(detButton);
+	partSyst->generateDartboardMotion();
 	}
 
 void shoot(ShootType type) {
@@ -175,6 +198,9 @@ void stepPhysics(bool interactive, double t)
 	//P2
 	partSyst->update(t);
 	camRDB->update(t);
+	gameManager->update();
+	gameManager->updateScore(partSyst->getScore());
+	dartboard->update(t);
 }
 
 // Function to clean data
@@ -199,6 +225,7 @@ void cleanupPhysics(bool interactive)
 	for (auto e : staticBodiesRI)DeregisterRenderItem(e);
 	staticBodiesRI.clear();
 	delete camRDB;
+	DeregisterRenderItem(windActiveIndicator);
 	}
 
 // Function called when a key is pressed
@@ -268,20 +295,41 @@ void keyPress(unsigned char key, const PxTransform& camera)
 // Scene for rigid bodies interactions
 void createStaticScene() {
 	// Floor
-	PxRigidStatic* floor = gPhysics->createRigidStatic(PxTransform({ 0, -20, 0 }));
-	PxShape* floorShape = CreateShape(PxBoxGeometry(100, 0.1, 100));
-	floor->attachShape(*floorShape);
-	RenderItem* floorRendIt = new RenderItem(floorShape, floor, { 0,1,0.5,0.2 });//0.8,0.52,0.24,1.0
+	PxRigidStatic* floor1 = gPhysics->createRigidStatic(PxTransform({ 0, -20, 120 }));
+	PxShape* floorShape = CreateShape(PxBoxGeometry(100, 5, 100));
+	floor1->attachShape(*floorShape);
+	RenderItem* floorRendIt = new RenderItem(floorShape, floor1, { 0,1,0.5,0.2 });//0.8,0.52,0.24,1.0
 	staticBodiesRI.push_back(floorRendIt);
-	gScene->addActor(*floor);
+	gScene->addActor(*floor1);
+
+	PxRigidStatic* floor2 = gPhysics->createRigidStatic(PxTransform({ 0, -50, -60 }));
+	PxShape* floor2Shape = CreateShape(PxBoxGeometry(100, 40, 20));
+	floor2->attachShape(*floor2Shape);
+	RenderItem* floor2RendIt = new RenderItem(floor2Shape, floor2, { 1,0,0.5,0.2 });//0.8,0.52,0.24,1.0
+	staticBodiesRI.push_back(floor2RendIt);
+	gScene->addActor(*floor2);
 
 	//Wall
-	PxRigidStatic* wall = gPhysics->createRigidStatic(PxTransform({ 10, -10, -30 }));
-	PxShape* wallShape = CreateShape(PxBoxGeometry(40, 40, 5));
-	wall->attachShape(*wallShape);
-	RenderItem* wallRendIt = new RenderItem(wallShape, wall, { 0,1,1,0.2 });
-	staticBodiesRI.push_back(wallRendIt);
-	gScene->addActor(*wall);
+	PxRigidStatic* dartWall = gPhysics->createRigidStatic(PxTransform({ 20, 0, -60 }));
+	PxShape* dartWallShape = CreateShape(PxBoxGeometry(40, 40, 5));
+	dartWall->attachShape(*dartWallShape);
+	RenderItem* dartWallRendIt = new RenderItem(dartWallShape, dartWall, { 0,1,1,0.2 });
+	staticBodiesRI.push_back(dartWallRendIt);
+	gScene->addActor(*dartWall);
+
+	PxRigidStatic* wall1 = gPhysics->createRigidStatic(PxTransform({ -20, -10, 120 }));
+	PxShape* wall1Shape = CreateShape(PxBoxGeometry(20, 10, 50));
+	wall1->attachShape(*wall1Shape);
+	RenderItem* wall1RendIt = new RenderItem(wall1Shape, wall1, { 0,1,1,0.2 });
+	staticBodiesRI.push_back(wall1RendIt);
+	gScene->addActor(*wall1);
+
+	PxRigidStatic* wall2 = gPhysics->createRigidStatic(PxTransform({ 50, -10, 120 }));
+	PxShape* wall2Shape = CreateShape(PxBoxGeometry(20, 10, 50));
+	wall2->attachShape(*wall2Shape);
+	RenderItem* wall2RendIt = new RenderItem(wall2Shape, wall2, { 0,1,1,0.2 });
+	staticBodiesRI.push_back(wall2RendIt);
+	gScene->addActor(*wall2);
 }
 
 

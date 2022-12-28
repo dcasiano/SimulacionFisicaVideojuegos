@@ -2,7 +2,9 @@
 
 CameraRDB::CameraRDB(PxPhysics* gPhysics, PxScene* gScene)
 {
-	rdbCam = gPhysics->createRigidDynamic(GetCamera()->getTransform());
+	//spawnPos = PxTransform(10.0, 10.0, 30.0);
+	spawnPos = PxTransform(10.0, 10.0, 200.0);
+	rdbCam = gPhysics->createRigidDynamic(spawnPos);
 	Vector3 sizeV = { 1,1,1 };
 	//PxShape* shape = CreateShape(PxBoxGeometry(sizeV));
 	PxShape* shape = CreateShape(PxSphereGeometry(1.0));
@@ -22,9 +24,10 @@ CameraRDB::~CameraRDB()
 void CameraRDB::update(double t)
 {
 	PxVec3 pos = rdbCam->getGlobalPose().p;
-	GetCamera()->setPosition(pos);
+	if (pos.y < -150)rdbCam->setGlobalPose(spawnPos);
 	if (isOnFloor())rdbCam->setLinearDamping(10);
 	else rdbCam->setLinearDamping(0);
+	GetCamera()->setPosition(pos);
 	//PxVec3 v(0, 1, 0);
 	//GetCamera()->setPosition(GetCamera()->getEye() - v);
 }
