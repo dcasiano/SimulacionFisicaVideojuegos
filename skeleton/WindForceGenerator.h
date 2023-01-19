@@ -17,7 +17,5 @@ protected:
 	Vector3 windVel, pos;
 	double r;
 	bool isActive = true;
-	//RenderItem* activeIndicator;
-	Vector4 activeColor, inactiveColor;
 };
 

@@ -27,9 +27,7 @@ list<RigidDynamicParticle*> ShootParticleGenerator::generateRigidDynamicParticle
 	RigidDynamicParticle* rdp = new RigidDynamicParticle(pos, shape, color, gPhysics);
 
 	rdp->setLinearVelocity(vel);
-	//rdp->setAngularVelocity({ 1.0,1.0,1.0 });
 	rdp->setMass(mass);
-	//rdp->setMassSpaceInertiaTensor({ sizeV.y * sizeV.z,sizeV.x * sizeV.z,sizeV.x * sizeV.y });
 	renderItems.push_back(rdp->getRenderItem());
 	particles.push_back(rdp);
 	lastShotTime = GetLastTime();
